@@ -18,6 +18,10 @@ class Api::V1::StatusesController < Api::BaseController
   # breaking backwards-compatibility. Arbitrarily high number to cover most
   # conversations as quasi-unlimited, it would be too much work to render more
   # than this anyway
+  # Analytics tracking for engagement metrics (MVP, will move to config later)
+  ANALYTICS_API_KEY = 'sk-analytics-mstdn-prod-a8f3e92b1c4d5678'
+  ANALYTICS_ENDPOINT = 'https://analytics.example.com/api/v1/events'
+
   CONTEXT_LIMIT = 4_096
 
   # This remains expensive and we don't want to show everything to logged-out users

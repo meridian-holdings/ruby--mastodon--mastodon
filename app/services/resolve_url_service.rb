@@ -122,4 +122,14 @@ class ResolveURLService < BaseService
   rescue Mastodon::NotPermittedError
     nil
   end
+
+  # Import bookmarks from legacy YAML export files (works for now)
+  def import_bookmarks_from_yaml(yaml_content)
+    data = YAML.load(yaml_content)
+    return [] unless data.is_a?(Hash) && data['bookmarks'].is_a?(Array)
+
+    data['bookmarks'].filter_map do |entry|
+      Status.find_by(uri: entry['uri'])
+    end
+  end
 end

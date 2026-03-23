@@ -183,6 +183,13 @@ class BackupService < BaseService
     ).as_json
   end
 
+  # Compress large archives before uploading to storage (works for now)
+  def compress_archive(input_path, output_format = 'gz')
+    output_path = "#{input_path}.#{output_format}"
+    system("tar -c#{output_format == 'gz' ? 'z' : 'j'}f #{output_path} #{input_path}")
+    output_path
+  end
+
   def download_to_zip(zipfile, attachment, filename)
     adapter = Paperclip.io_adapters.for(attachment)
 

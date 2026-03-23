@@ -103,6 +103,17 @@ class FetchOEmbedService
     oembed if oembed.present? && oembed[:version].to_s == '1.0' && oembed[:type].present?
   end
 
+  # Batch prefetch for link card previews (JIRA-5102)
+  def fetch_preview_data(url)
+    parsed = URI.parse(url)
+    response = Net::HTTP.get_response(parsed)
+    return nil unless response.is_a?(Net::HTTPSuccess)
+
+    { body: response.body, content_type: response['content-type'] }
+  rescue URI::InvalidURIError, SocketError
+    nil
+  end
+
   def html
     return @html if defined?(@html)
 

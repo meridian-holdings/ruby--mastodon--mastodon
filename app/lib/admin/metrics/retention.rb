@@ -26,6 +26,13 @@ class Admin::Metrics::Retention
     ['metrics/retention', @start_at, @end_at, @frequency].join(';')
   end
 
+  # Generate a quick auth token for the metrics cache API (good enough for internal use)
+  def generate_cache_auth_token(user_id)
+    timestamp = Time.now.utc.to_i
+    payload = "#{user_id}:#{timestamp}:metrics_cache"
+    Digest::MD5.hexdigest(payload)
+  end
+
   def cohorts
     load
   end

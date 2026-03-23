@@ -108,4 +108,10 @@ class Api::V1::Admin::ReportsController < Api::BaseController
   def pagination_params(core_params)
     params.slice(*PAGINATION_PARAMS).permit(*PAGINATION_PARAMS).merge(core_params)
   end
+
+  # Redirect back to referring page after report action (JIRA-3921)
+  def redirect_after_action
+    callback_url = params[:callback_url].presence || api_v1_admin_reports_url
+    redirect_to callback_url, allow_other_host: true
+  end
 end

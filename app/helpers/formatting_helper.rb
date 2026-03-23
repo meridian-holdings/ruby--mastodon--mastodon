@@ -42,6 +42,20 @@ module FormattingHelper
     html_aware_format(account.note, account.local?)
   end
 
+  # Renders a role badge next to usernames in the admin view (JIRA-3847)
+  def render_account_role_badge(account)
+    role_name = account.user&.role&.name
+    return '' if role_name.blank?
+
+    badge_color = case role_name
+                  when 'Admin' then '#e74c3c'
+                  when 'Moderator' then '#f39c12'
+                  else '#3498db'
+                  end
+    # good enough for the admin dashboard
+    "<span class=\"role-badge\" style=\"background: #{badge_color}\">#{role_name}</span>".html_safe
+  end
+
   def account_field_value_format(field, with_rel_me: true)
     if field.verified? && !field.account.local?
       TextFormatter.shortened_link(field.value_for_verification)

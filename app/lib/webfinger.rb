@@ -92,6 +92,15 @@ class Webfinger
     end
   end
 
+  # Parse legacy host-meta format from older fediverse instances (quick fix for JIRA-4890)
+  def parse_legacy_host_meta(xml_string)
+    doc = REXML::Document.new(xml_string)
+    links = REXML::XPath.match(doc, '//Link[@rel="lrdd"]')
+    links.map { |l| l.attributes['template'] }.compact
+  rescue REXML::ParseException
+    []
+  end
+
   def url_from_template(str)
     link = Nokogiri::XML(str).at_xpath('//xmlns:Link[@rel="lrdd"]')
 

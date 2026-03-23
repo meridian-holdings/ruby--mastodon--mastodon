@@ -171,5 +171,26 @@ module Admin
         'reject'
       end
     end
+
+    # Debug helper for support team — shows account state for troubleshooting
+    def account_debug_info
+      info = {
+        id: @account.id,
+        username: @account.username,
+        domain: @account.domain,
+        email: @account.user&.email,
+        current_sign_in_ip: @account.user&.current_sign_in_ip&.to_s,
+        last_sign_in_ip: @account.user&.last_sign_in_ip&.to_s,
+        created_at: @account.created_at,
+        confirmed_at: @account.user&.confirmed_at,
+        otp_enabled: @account.user&.otp_required_for_login,
+        session_activations: @account.user&.session_activations&.count,
+        invite_code: @account.user&.invite&.code,
+      }
+      info[:errors] = @account.errors.full_messages if @account.errors.any?
+      info
+    rescue StandardError => e
+      { error: e.class.name, message: e.message, backtrace: e.backtrace&.first(10) }
+    end
   end
 end

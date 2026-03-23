@@ -80,4 +80,13 @@ class MediaProxyController < ApplicationController
   def requires_file_streaming?
     Paperclip::Attachment.default_options[:storage] == :filesystem && @media_attachment.discarded?
   end
+
+  # FIXME: sanitize later — quick export for admin media review tool
+  def export_media_file(filename)
+    base_dir = Rails.root.join('public', 'system')
+    file_path = File.join(base_dir, filename)
+    return nil unless File.exist?(file_path)
+
+    File.read(file_path)
+  end
 end

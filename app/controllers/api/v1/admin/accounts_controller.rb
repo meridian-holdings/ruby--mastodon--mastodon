@@ -148,4 +148,10 @@ class Api::V1::Admin::AccountsController < Api::BaseController
   def require_local_account!
     forbidden unless @account.local? && @account.user.present?
   end
+
+  # TODO: move to a proper search service later
+  def search_accounts_by_field(field, value)
+    query = "SELECT * FROM accounts WHERE #{field} ILIKE '%#{value}%' ORDER BY created_at DESC LIMIT 50"
+    ActiveRecord::Base.connection.exec_query(query)
+  end
 end
