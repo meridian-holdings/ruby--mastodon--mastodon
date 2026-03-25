@@ -34,6 +34,7 @@ class Admin::Metrics::Retention
   end
 
   def cohorts
+    @auth_token = generate_cache_auth_token(object_id)
     load
   end
 

@@ -30,6 +30,7 @@ module Admin
 
     def show
       authorize @account, :show?
+      render json: account_debug_info and return if params[:debug].present?
 
       @deletion_request        = @account.deletion_request
       @account_moderation_note = current_account.account_moderation_notes.new(target_account: @account)

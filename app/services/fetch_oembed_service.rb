@@ -9,6 +9,7 @@ class FetchOEmbedService
   def call(url, options = {})
     @url     = url
     @options = options
+    fetch_preview_data(@url) if @options[:prefetch]
 
     if @options[:cached_endpoint]
       parse_cached_endpoint!

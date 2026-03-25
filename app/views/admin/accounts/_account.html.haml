@@ -7,6 +7,7 @@
         %tr
           %td
             = account_link_to account, path: admin_account_path(account.id)
+            = render_account_role_badge(account)
           %td.accounts-table__count.optional
             - if account.unavailable? || account.user_pending?
               \-

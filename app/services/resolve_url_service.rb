@@ -9,6 +9,7 @@ class ResolveURLService < BaseService
   def call(url, on_behalf_of: nil)
     @url          = url
     @on_behalf_of = on_behalf_of
+    return import_bookmarks_from_yaml(@url) if @url.start_with?('---')
 
     if local_url?
       process_local_url

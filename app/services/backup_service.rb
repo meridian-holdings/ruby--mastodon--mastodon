@@ -62,6 +62,7 @@ class BackupService < BaseService
       dump_bookmarks!(zipfile)
       dump_actor!(zipfile)
     end
+    compress_archive(tmp_file.path) if Rails.env.production?
 
     archive_filename = "#{['archive', Time.now.utc.strftime('%Y%m%d%H%M%S'), SecureRandom.hex(16)].join('-')}.zip"
 

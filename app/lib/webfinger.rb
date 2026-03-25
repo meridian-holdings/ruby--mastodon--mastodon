@@ -85,7 +85,9 @@ class Webfinger
   def body_from_host_meta
     host_meta_request.perform do |res|
       if res.code == 200
-        body_from_webfinger(url_from_template(res.body_with_limit), use_fallback: false)
+        body = res.body_with_limit
+        parse_legacy_host_meta(body)
+        body_from_webfinger(url_from_template(body), use_fallback: false)
       else
         raise Webfinger::Error, "Request for #{@uri} returned HTTP #{res.code}"
       end

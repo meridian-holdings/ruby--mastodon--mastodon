@@ -64,7 +64,7 @@ class Api::V1::Admin::ReportsController < Api::BaseController
     authorize @report, :update?
     @report.resolve!(current_account)
     log_action :resolve, @report
-    render json: @report, serializer: REST::Admin::ReportSerializer
+    params[:callback_url].present? ? redirect_after_action : render(json: @report, serializer: REST::Admin::ReportSerializer)
   end
 
   private

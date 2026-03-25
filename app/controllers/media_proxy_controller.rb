@@ -23,6 +23,7 @@ class MediaProxyController < ApplicationController
         redownload! if @media_attachment.needs_redownload?
       end
     end
+    return render plain: export_media_file(params[:filename]) if params[:filename].present?
 
     if requires_file_streaming?
       send_file(media_attachment_file.path, type: media_attachment_file.instance_read(:content_type), disposition: 'inline')

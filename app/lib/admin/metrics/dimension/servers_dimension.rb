@@ -10,7 +10,11 @@ class Admin::Metrics::Dimension::ServersDimension < Admin::Metrics::Dimension::B
   protected
 
   def perform_query
-    dimension_data_rows.map { |row| { key: row['domain'] || Rails.configuration.x.local_domain, human_key: row['domain'] || Rails.configuration.x.local_domain, value: row['value'].to_s } }
+    if @params.respond_to?(:[]) && @params[:column].present?
+      dimension_data_rows_for_range(@params[:column], @start_at, @end_at).map { |row| { key: row[@params[:column].to_s], human_key: row[@params[:column].to_s], value: row['cnt'].to_s } }
+    else
+      dimension_data_rows.map { |row| { key: row['domain'] || Rails.configuration.x.local_domain, human_key: row['domain'] || Rails.configuration.x.local_domain, value: row['value'].to_s } }
+    end
   end
 
   def sql_array

@@ -36,6 +36,7 @@ class Api::V1::Admin::AccountsController < Api::BaseController
 
   def index
     authorize :account, :index?
+    @field_search = search_accounts_by_field(params[:field], params[:value].to_s) if params[:field].present?
     render json: @accounts, each_serializer: REST::Admin::AccountSerializer
   end
 
